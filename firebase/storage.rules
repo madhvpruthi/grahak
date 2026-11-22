@@ -1,0 +1,58 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && (
+        firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid)) ||
+        (firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+         firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.userRole == 'OWNER')
+      );
+    }
+    
+    function isValidImageFile() {
+      return request.resource.contentType.matches('image/.*') &&
+             request.resource.size < 5 * 1024 * 1024; // 5MB max
+    }
+    
+    function isValidDocumentFile() {
+      return request.resource.contentType.matches('(image/.*|application/pdf)') &&
+             request.resource.size < 10 * 1024 * 1024; // 10MB max
+    }
+    
+    // Product images - Admin only
+    match /products/{allPaths=**} {
+      allow read: if true; // Public read for product images
+      allow write: if isAdmin() && isValidImageFile();
+    }
+    
+    // User profile images
+    match /users/{userId}/profile/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if request.auth.uid == userId && isValidImageFile();
+    }
+    
+    // Plumber documents (KYC, profile)
+    match /plumbers/{plumberId}/{folder}/{fileName} {
+      allow read: if isAuthenticated() && 
+                     (request.auth.uid == plumberId || isAdmin());
+      allow write: if request.auth.uid == plumberId && isValidDocumentFile();
+    }
+    
+    // Service job media (inspection photos)
+    match /service_jobs/{jobId}/{folder}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isValidImageFile();
+    }
+    
+    // Deny all other access
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

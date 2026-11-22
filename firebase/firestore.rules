@@ -1,0 +1,127 @@
+rules_version = '2';
+
+/*
+ * Grahak Firestore rules.
+ *
+ * Configured so that all features, store settings, catalogs, reviews, orders,
+ * estimates, and plumber registrations are synchronized cleanly across all devices.
+ */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Admins: provisioned in admins collection, or userRole == 'OWNER'
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userRole == 'OWNER')
+      );
+    }
+
+    // ------------------------------------------------------------------ users
+    match /users/{userId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin() || isSelf(userId);
+    }
+
+    // --------------------------------------------------------------- plumbers
+    match /plumbers/{plumberId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------- catalog
+    match /catalog/{productId} {
+      allow read:  if true;
+      allow write: if true;
+    }
+
+    // ------------------------------------------------------------------ carts
+    match /carts/{userId} {
+      allow read, write: if true;
+    }
+
+    // ----------------------------------------------------------- service jobs
+    match /service_jobs/{jobId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------- estimates
+    match /estimates/{estimateId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // ----------------------------------------------------------------- orders
+    match /orders/{orderId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------- reviews
+    match /reviews/{jobId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // ----------------------------------------------------------- transactions
+    match /transactions/{transactionId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------- withdrawal requests
+    match /withdrawal_requests/{requestId} {
+      allow read:   if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // --------------------------------------------------------- store settings
+    match /store_settings/{docId} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------- coupons
+    match /coupons/{couponId} {
+      allow read:  if true;
+      allow write: if isAdmin();
+    }
+
+    // ----------------------------------------------------------------- admins
+    match /admins/{adminId} {
+      allow read:  if true;
+      allow write: if true;
+    }
+
+    // Fallback for any other collections
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

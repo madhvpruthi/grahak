@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand yellow. Must stay in sync with FixitYellow in ui/theme/Color.kt. -->
+    <color name="grahak_black">#09090B</color>
+    <color name="fixit_yellow">#F7AC49</color>
+    <color name="ic_launcher_background">#F7AC49</color>
+    <color name="fixit_ink">#101314</color>
+    <color name="fixit_paper">#F6F4EF</color>
+</resources>

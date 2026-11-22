@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FixIt</string>
+    <string name="store_name">Prince Sanitary Store</string>
+    
+    <!-- Common -->
+    <string name="loading">Loading…</string>
+    <string name="error_generic">Something went wrong</string>
+    <string name="retry">Retry</string>
+    
+    <!-- Auth -->
+    <string name="phone_number">Phone Number</string>
+    <string name="otp">OTP</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="verify_login">Verify &amp; Login</string>
+    
+    <!-- Consumer -->
+    <string name="home">Home</string>
+    <string name="categories">Categories</string>
+    <string name="services">Services</string>
+    <string name="orders">My Orders</string>
+    <string name="profile">Profile</string>
+    
+    <!-- Plumber -->
+    <string name="jobs">Jobs</string>
+    <string name="estimates">Estimates</string>
+    <string name="wallet">Wallet</string>
+    
+    <!-- Products -->
+    <string name="fixed_price">Fixed Price</string>
+    <string name="rfq_only">Request Quote</string>
+    <string name="out_of_stock">Out of Stock</string>
+    <string name="add_to_cart">Add to Cart</string>
+    
+    <!-- Services -->
+    <string name="book_plumber">Book Plumber</string>
+    <string name="plumber_available">Available</string>
+    <string name="plumber_busy">Busy</string>
+    
+    <!-- Orders -->
+    <string name="store_pickup">Store Pickup</string>
+    <string name="site_drop">Site Delivery</string>
+    <string name="order_placed">Order Placed</string>
+    <string name="order_dispatched">Dispatched</string>
+    <string name="order_delivered">Delivered</string>
+</resources>

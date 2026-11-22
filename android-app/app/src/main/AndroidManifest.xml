@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <!--
+      android:enableOnBackInvokedCallback="false" below is deliberate.
+
+      Android 13+ ships "predictive back", and it defaults to ON for apps
+      targeting SDK 34+ (this app targets 37). Predictive back asks the app to
+      SEEK its back transition so the framework can render a live preview of the
+      destination, and Compose Navigation hooks into that seeking.
+
+      This app supplies its own screen transitions and its own edge swipe-back
+      gesture (ui/components/SwipeBack.kt), so the system-driven preview and ours
+      ended up driving the same AnimatedContent simultaneously: both the outgoing
+      and incoming screens stayed composed and fully opaque, which looked like
+      the previous screen hanging on top of the new one. It reproduced ONLY via
+      the system back button, because in-app back buttons call popBackStack()
+      directly and never trigger seeking.
+
+      Opting out puts back on the legacy dispatcher: one deterministic pop,
+      driven entirely by our own transitions.
+    -->
+    <application
+        android:name=".GrahakApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.FixIt.Splash"
+        tools:targetApi="31"
+        android:enableOnBackInvokedCallback="false">
+        
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FixIt.Splash"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Maps: used by the "pin your site" picker when booking a plumber.
+             Key comes from MAPS_API_KEY in local.properties. -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <!-- Firebase Cloud Messaging -->
+        <service
+            android:name=".data.service.GrahakFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

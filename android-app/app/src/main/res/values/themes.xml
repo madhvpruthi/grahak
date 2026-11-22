@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+      Launch theme.
+
+      windowBackground is the brand yellow so the very first frame the system
+      draws - before Compose has even started - is already the splash colour.
+      Without this you get a white (or black) flash, which is the single most
+      common reason a launch feels cheap.
+    -->
+    <style name="Theme.FixIt.Splash" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/grahak_black</item>
+        <item name="android:statusBarColor">@color/grahak_black</item>
+        <item name="android:navigationBarColor">@color/grahak_black</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+    <!-- Kept for backwards compatibility with any older manifest reference. -->
+    <style name="Theme.Grahak" parent="Theme.FixIt.Splash" />
+
+</resources>
