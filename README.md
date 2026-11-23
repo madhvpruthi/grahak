@@ -1,6 +1,14 @@
 # Grahak - Consumer & Plumber Services App
 
+[![Release](https://img.shields.io/github/v/release/madhvpruthi/grahak?label=Latest%20Release&color=blue)](https://github.com/madhvpruthi/grahak/releases/latest)
+[![Download APK](https://img.shields.io/badge/Download-APK%20(4.8%20MB)-success?logo=android)](https://github.com/madhvpruthi/grahak/releases/download/v2.2.0/grahak-v2.2.0.apk)
+
 A consumer-facing marketplace app for browsing products, ordering materials, and booking on-demand plumber services.
+
+### 📥 Direct APK Downloads
+- 🚀 **[Download Release APK (v2.2.0)](https://github.com/madhvpruthi/grahak/releases/download/v2.2.0/grahak-v2.2.0.apk)** (4.8 MB — Minified, ready to install)
+- 🛠️ **[Download Debug APK (v2.2.0)](https://github.com/madhvpruthi/grahak/releases/download/v2.2.0/grahak-v2.2.0-debug.apk)** (27.9 MB — Developer build)
+- 📦 **[All GitHub Releases](https://github.com/madhvpruthi/grahak/releases)**
 
 ## 🏗️ What This App Does
 
